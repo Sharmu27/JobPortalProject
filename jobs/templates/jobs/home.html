@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobPortal Home</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="nav-logo">JobPortal</a>
+        <div class="nav-links">
+            <a href="{% url 'search' %}">Explore Open Positions</a>
+            {% if user.is_authenticated %}
+                {% if user.profile.user_type == 'employer' %}
+                    <a href="{% url 'employer_dashboard' %}">Employer Control Panel</a>
+                {% else %}
+                    <a href="{% url 'applications' %}">My Applications</a>
+                {% endif %}
+                <a href="{% url 'users:profile' %}">Profile Configuration</a>
+                <a href="{% url 'users:logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'users:login' %}">Login</a>
+                <a href="{% url 'users:register' %}">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="container">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="message {{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <div style="text-align: center; margin: 4rem 0;">
+            <h1 style="font-size: 2.5rem; margin-bottom:1rem;">Discover Your Next Dream Career</h1>
+            <p>Connect with reliable top-tier hiring entities around the world today.</p>
+            <br>
+            <a href="{% url 'search' %}" class="btn">Start Searching Vacancies Now</a>
+        </div>
+        <h2>Latest Job Listings Added</h2>
+        <div class="dashboard-grid">
+            {% for job in jobs %}
+            <div class="card">
+                <h3>{{ job.title }}</h3>
+                <p style="color: #4b5563;">{{ job.location }} | <span class="badge">{{ job.job_type }}</span></p>
+                <br>
+                <p>{{ job.description|truncatewords:20 }}</p>
+                <br>
+                {% if user.is_authenticated and user.profile.user_type == 'seeker' %}
+                <a href="{% url 'apply' job.pk %}" class="btn">Apply Now</a>
+                {% else %}
+                <a href="{% url 'search' %}" class="btn btn-secondary">View Details</a>
+                {% endif %}
+            </div>
+            {% empty %}
+            <p>No active job vacancy items found currently.</p>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for {{ job.title }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container" style="max-width: 600px;">
+        <div class="card">
+            <h2>Application for: {{ job.title }}</h2>
+            <p style="color:#6b7280;">Company hiring board listing entry parameters tracking</p><br>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success">Transmit Application Materials</button>
+                <a href="{% url 'home' %}" class="btn btn-secondary">Back to Feed</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

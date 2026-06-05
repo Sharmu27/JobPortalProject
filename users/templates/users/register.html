@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Job Portal</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="nav-logo">JobPortal</a>
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'users:login' %}">Login</a>
+        </div>
+    </nav>
+    <div class="container" style="max-width: 500px;">
+        <div class="card">
+            <h2>Create Account</h2><br>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn">Register</button>
+            </form>
+            <br>
+            <p>Already have an account? <a href="{% url 'users:login' %}" style="color:var(--primary-color);">Login here</a></p>
+        </div>
+    </div>
+</body>
+</html>

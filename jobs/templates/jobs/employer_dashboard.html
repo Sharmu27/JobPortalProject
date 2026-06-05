@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Dashboard - Job Portal</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-logo"><a href="{% url 'home' %}">JobPortal</a></div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Browse Jobs</a></li>
+            <li><a href="{% url 'users:profile' %}">My Profile</a></li>
+            <li><a href="{% url 'users:logout' %}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="message {{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h1>Employer Dashboard</h1>
+            <a href="{% url 'create_job' %}" class="btn btn-success">+ Post a New Job</a>
+        </div>
+
+        <h2>Your Active Job Listings</h2>
+        <div class="dashboard-grid">
+            {% for job in jobs %}
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <h3>{{ job.title }}</h3>
+                        {% if job.is_filled %}
+                            <span class="badge" style="background-color: #fee2e2; color: #991b1b;">Position Filled</span>
+                        {% else %}
+                            <span class="badge" style="background-color: #d1fae5; color: #065f46;">Accepting Applications</span>
+                        {% endif %}
+                    </div>
+                    <p style="color: #6b7280; font-size: 0.9rem; margin: 0.5rem 0;">Location: {{ job.location }} | Type: {{ job.job_type }}</p>
+                    <p style="margin-bottom: 1rem;">Deadline: {{ job.application_deadline|date:"M d, Y" }}</p>
+                    
+                    <div style="border-top: 1px solid #e5e7eb; padding-top: 1rem; margin-top: 1rem; display: flex; gap: 0.5rem;">
+                        <a href="{% url 'edit_job' job.id %}" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.5rem 1rem;">Edit details</a>
+                        <a href="{% url 'applications' %}?job_id={{ job.id }}" class="btn" style="font-size: 0.85rem; padding: 0.5rem 1rem;">View Applicants ({{ job.applications.count }})</a>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                    <p style="color: #6b7280; font-size: 1.1rem;">You haven't posted any jobs yet.</p>
+                    <a href="{% url 'create_job' %}" class="btn" style="margin-top: 1rem;">Get Started Now</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
